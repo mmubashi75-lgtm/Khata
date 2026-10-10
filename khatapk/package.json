@@ -1,0 +1,33 @@
+{
+  "name": "khatapk",
+  "version": "1.0.0",
+  "description": "Pakistan-first digital khata \u2014 track every customer's udhaar without the notebook. SaaS-ready with Supabase auth and Paddle billing.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/write-env.js && vite",
+    "build": "node scripts/write-env.js && vite build",
+    "preview": "vite preview",
+    "start": "vite preview --host"
+  },
+  "keywords": [
+    "khata",
+    "udhaar",
+    "pakistan",
+    "ledger",
+    "saas",
+    "supabase",
+    "paddle"
+  ],
+  "author": "KhataPK",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.4.11"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

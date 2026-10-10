@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pricing · KhataPK</title>
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div class="landing">
+    <div class="topbar">
+      <a class="brand" href="index.html"><div class="logo">ک</div> KhataPK</a>
+      <a class="btn btn-s" href="login.html">Sign in</a>
+    </div>
+    <h1>Simple USD pricing</h1>
+    <p class="sub">7-day free trial on every plan. Cancel anytime. Paddle handles checkout and tax.</p>
+    <div class="price-grid" style="margin-top:18px">
+      <div class="price">
+        <h3>Starter</h3>
+        <p class="v" style="font-family:var(--font);font-size:32px">$3<span class="muted">/mo</span></p>
+        <p class="muted">Core ledger, customers & suppliers, WhatsApp balance & reminders, PIN lock, backup.</p>
+        <button class="btn btn-s" style="margin-top:12px;width:100%" data-plan="starter">Start trial — $3/mo</button>
+      </div>
+      <div class="price feat">
+        <h3>Growth</h3>
+        <p class="v" style="font-family:var(--font);font-size:32px">$6<span class="muted">/mo</span></p>
+        <p class="muted">Everything in Starter plus reports, cash book, staff notes, collection tools.</p>
+        <button class="btn btn-p" style="margin-top:12px;width:100%" data-plan="growth">Start trial — $6/mo</button>
+      </div>
+      <div class="price">
+        <h3>Business</h3>
+        <p class="v" style="font-family:var(--font);font-size:32px">$15<span class="muted">/mo</span></p>
+        <p class="muted">Everything in Growth plus multi-device priority sync and full staff roles.</p>
+        <button class="btn btn-s" style="margin-top:12px;width:100%" data-plan="business">Start trial — $15/mo</button>
+      </div>
+    </div>
+    <p class="muted" id="payMsg" style="margin-top:16px"></p>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+  <script src="/js/env.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/paddle.js"></script>
+  <script>
+    (function () {
+      Billing.boot();
+      var session = Auth.localSession();
+      document.querySelectorAll('[data-plan]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var plan = btn.getAttribute('data-plan');
+          var price = KPK.config.prices[plan];
+          var msg = document.getElementById('payMsg');
+          if (!price) {
+            msg.textContent = 'Price ID missing. Check VITE_PADDLE_PRICE_* env on deploy.';
+            return;
+          }
+          if (!session) {
+            msg.textContent = 'Sign in first, then return here to subscribe.';
+            setTimeout(function () { location.href = 'login.html?next=pricing'; }, 900);
+            return;
+          }
+          if (!KPK.config.paddleToken) {
+            msg.textContent = 'Paddle token not configured on this deploy.';
+            return;
+          }
+          msg.textContent = 'Opening checkout…';
+          Billing.checkout(price, session.email, session.id);
+        });
+      });
+    })();
+  </script>
+
+    <p class="muted" style="margin-top:28px;text-align:center;font-size:13px">
+      <a href="terms.html">Terms</a> ·
+      <a href="privacy.html">Privacy</a> ·
+      <a href="refund.html">Refunds</a> ·
+      <a href="pricing.html">Pricing</a>
+    </p>
+
+</body>
+</html>

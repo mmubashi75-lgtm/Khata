@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in · KhataPK</title>
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <div class="landing" style="max-width:440px">
+    <div class="brand" style="margin-bottom:18px"><div class="logo">ک</div> KhataPK</div>
+    <div class="card">
+      <h1>Open your khata</h1>
+      <p class="muted">Supabase auth when keys are set. Otherwise a local session so the product is usable today.</p>
+      <label>Email</label><input id="email" type="email" placeholder="shop@email.com" value="owner@khatapk.pk">
+      <label>Password</label><input id="pass" type="password" placeholder="••••••••" value="demo1234">
+      <label>Shop name (signup)</label><input id="biz" placeholder="Ahmed General Store">
+      <div class="row" style="margin-top:14px">
+        <button class="btn btn-p" id="in">Sign in</button>
+        <button class="btn btn-s" id="up">Create account</button>
+      </div>
+      <p class="muted" id="err" style="color:var(--red)"></p>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/env.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/plan.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    const err = (m) => document.getElementById('err').textContent = m || '';
+    document.getElementById('in').onclick = async () => {
+      err('');
+      try {
+        await Auth.signIn(document.getElementById('email').value, document.getElementById('pass').value);
+        var q = new URLSearchParams(location.search); location.href = (q.get('next') === 'pricing' ? 'pricing.html' : 'app.html');
+      } catch (e) { err(e.message); }
+    };
+    document.getElementById('up').onclick = async () => {
+      err('');
+      try {
+        await Auth.signUp(document.getElementById('email').value, document.getElementById('pass').value, {
+          name: 'Owner', business: document.getElementById('biz').value || 'Mera Karobar'
+        });
+        var q = new URLSearchParams(location.search); location.href = (q.get('next') === 'pricing' ? 'pricing.html' : 'app.html');
+      } catch (e) { err(e.message); }
+    };
+  </script>
+
+    <p class="muted" style="margin-top:28px;text-align:center;font-size:13px">
+      <a href="terms.html">Terms</a> ·
+      <a href="privacy.html">Privacy</a> ·
+      <a href="refund.html">Refunds</a> ·
+      <a href="pricing.html">Pricing</a>
+    </p>
+
+</body>
+</html>
